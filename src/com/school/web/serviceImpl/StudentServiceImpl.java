@@ -8,9 +8,9 @@ public class StudentServiceImpl implements StudentService {
 	private StudentBean[] students;
 	private int count;
 	
-	public StudentServiceImpl(int count) {
-		students = new StudentBean[count];
+	public StudentServiceImpl() {
 		this.count = 0;
+		students = new StudentBean[2];
 	}
 	@Override
 	public void setCount(int count) {
@@ -22,9 +22,17 @@ public class StudentServiceImpl implements StudentService {
 	}
 	@Override
 	public void addStudent(StudentBean student) {   // 보이드는 답이 없다.  디스를 내 안에서  리턴 없이 
-		this.students [count] = student;
-		count++;
+		if(count==students.length) {
+			StudentBean[] students2 = new StudentBean[students.length+2];
+			System.arraycopy(students, 0, students2, 0, students.length);
+			students = students2;
+		}else {}	
+			this.students[count++] = student;
+		
 	}
+//			student.count + 10;
+//			students[count] b = students[count];
+//			students[count] = null;
 	@Override
 	public void addScore(StudentBean score) {
 		
@@ -84,6 +92,41 @@ public class StudentServiceImpl implements StudentService {
 		}		
 	}		
 		return studentc;
+	}
+	
+	@Override
+	public void updatePassword(StudentBean student) {
+		
+		for(int i=0; i<count; i++) {                                     //1   이부분을 1. 아래를 2.3이라고 할때  1=2=3이다. 
+			if(student.getId().equals(students[i].getId())) {			//아이디로 비교	//왜냐면 위 오버라이드에서 findStudentById가 있어서 가능
+				this.students[i].setPass(student.getPass());  			//비번으로 저장
+				break;
+			}
+	}
+//		StudentBean t = findStudentById(student.getId());                //2   2번의 t를 합치면 3번이 된다. 
+//		t.setPass(student.getPass());
+		
+		
+//		findStudentById(student.getId()).setPass(student.getPass());  //  3
+		
+		
+		
+		this.students[0].setPass(student.getPass());     //students배열0번에패스워드를변경한다.(student에 비번을 이용한다. )
+		
+	}
+	@Override
+	public void deleteInfo(String id) {						//보이드면  가볍게 this.students[0] = null; 이 나와야한다. 무조건
+//		StudentBean student = new StudentBean();
+		for(int i=0; i<count; i++) {
+			if(id.equals(students[i].getId())) {
+				this.students[i] = null;
+				students[i] = students[count-1];
+				students[count-1] = null; 
+			count--;
+			break;
+			}
+		}
+		
 	}
 	
 	}
